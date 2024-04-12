@@ -1,26 +1,2 @@
 server:
-  port: 8888
-#Congiguration for the database
-spring:
-  datasource:
-    url: jdbc:postgresql://dev-do-user-16216221-0.c.db.ondigitalocean.com:25060/dev_db
-    username: doadmin
-    password: AVNS_Q7Nt2soxknvLCuoex4J
-    driver-class-name: org.postgresql.Driver
-  servlet:
-    multipart:
-      max-file-size: 5MB
-      max-request-size: 5MB
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-file_storage:
-  image_location: "filestorage/images/"
-  client_path: "/images/**"
-springdoc:
-  swagger-ui:
-    path: /api
+  port: 9999
