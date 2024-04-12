@@ -1,10 +1,17 @@
 package org.project.spring_mini_project.domain;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Date;
+import java.util.Set;
 
+@Entity
+@Table(name = "users")
+@Data
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String address1;
     private String address2;
@@ -33,4 +40,23 @@ public class User {
     @Column(nullable = false)
     private String uuid;
     private String verification_code;
+
+    //relationship student
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Student student;
+
+    //relationship instructor
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Instructor instructor;
+
+    //relationship roles
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
+
+
 }

@@ -1,8 +1,16 @@
 package org.project.spring_mini_project.domain;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.Set;
+
+@Entity
+@Table(name = "countries")
+@Data
 public class Country {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String flag;
 
@@ -21,4 +29,8 @@ public class Country {
     @Column(nullable = false)
 
     private Integer phone_code;
+
+    //relationship city
+    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+    private Set<City> cities;
 }

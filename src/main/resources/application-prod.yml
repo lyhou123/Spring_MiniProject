@@ -3,9 +3,9 @@ server:
 #Congiguration for the database
 spring:
   datasource:
-    url: jdbc:postgresql://dev-do-user-16216221-0.c.db.ondigitalocean.com:25060/dev_db
-    username: doadmin
-    password: AVNS_Q7Nt2soxknvLCuoex4J
+    url: jdbc:postgresql://127.0.0.1:5432/testing
+    username: postgres
+    password: qwerty
     driver-class-name: org.postgresql.Driver
   servlet:
     multipart:
