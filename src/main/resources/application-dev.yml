@@ -1,26 +1,26 @@
 server:
   port: 8888
-# our own configuration for the file storage
-file:
-  storage-dir: "filestorage/images/"
-  client-dir: "/images/**"
+#Congiguration for the database
 spring:
-  servlet: # this is for file upload
-    multipart:
-      max-file-size: 5MB
-      max-request-size: 5MB
-
-
   datasource:
+    url: jdbc:postgresql://localhost:5432/e_learning
     username: postgres
     password: lyhou123
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/e_learning
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
   jpa:
-    show-sql: true
     hibernate:
-      ddl-auto: update # or update
-    generate-ddl: true
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+file_storage:
+  image_location: "filestorage/images/"
+  client_path: "/images/**"
 springdoc:
   swagger-ui:
     path: /
