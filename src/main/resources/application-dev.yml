@@ -3,9 +3,9 @@ server:
 #Congiguration for the database
 spring:
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/testing
+    url: jdbc:postgresql://127.0.0.1:5432/e_learning_db
     username: postgres
-    password: qwerty
+    password: seak$
     driver-class-name: org.postgresql.Driver
   servlet:
     multipart:
