@@ -15,13 +15,14 @@ public class Role {
     private String name ;
 
     //relationship user
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Set<User> user;
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    private Set<User> users;
 
     //relationship authority
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "roles_authorities",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<Authority> authorities;
+
 }
