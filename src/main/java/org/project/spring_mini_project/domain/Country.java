@@ -31,6 +31,6 @@ public class Country {
     private Integer phone_code;
 
     //relationship city
-    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "countries", fetch = FetchType.LAZY)
     private Set<City> cities;
 }
