@@ -19,6 +19,21 @@ public class Categories {
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Course> courses;
 
-    //relationship parent category
-    private Integer parent_category_id;
+    // Self-referencing relationship
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_category_id")
+    private Categories parentCategory;
+
+    @OneToMany(mappedBy = "parentCategory", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Categories> subCategories;
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        // other fields except the ones forming the bidirectional relationship
+        return result;
+    }
 }
