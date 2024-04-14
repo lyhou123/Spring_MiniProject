@@ -5,5 +5,6 @@ public record StudentCreateRequest (
         Boolean is_blocked,
         String university,
         Long user_id
+
 ) {
 }

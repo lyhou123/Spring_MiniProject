@@ -31,5 +31,8 @@ public class Course {
     @JoinColumn(name = "ins_id", insertable = false, updatable = false)
     private Instructor instructor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    private Enrollment enrollment;
 
 }

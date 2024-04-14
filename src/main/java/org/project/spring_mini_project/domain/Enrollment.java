@@ -6,6 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "enrollments")
@@ -20,7 +21,8 @@ public class Enrollment {
 
 
     //relationship
-    private long course_id;
+    @OneToMany(mappedBy = "enrollment",fetch = FetchType.LAZY)
+    private Set<Course> course_id;
     private LocalDateTime enrolled_at;
     private Boolean is_deleted;
     private Boolean is_certified;
@@ -28,6 +30,6 @@ public class Enrollment {
 
     //relationship
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", insertable = false, updatable = false)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
     private Student student;
 }
