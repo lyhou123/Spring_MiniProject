@@ -27,8 +27,8 @@ public class Instructor {
     private String profile;
 
     //relationship user_id
-    @OneToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
     private String website;
