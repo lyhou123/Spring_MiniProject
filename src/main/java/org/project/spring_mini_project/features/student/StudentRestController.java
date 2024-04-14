@@ -1,23 +1,51 @@
 package org.project.spring_mini_project.features.student;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.project.spring_mini_project.features.student.dto.StudentCreateRequest;
 import org.project.spring_mini_project.features.student.dto.StudentRespone;
+import org.project.spring_mini_project.features.student.dto.StudentUpdateRequest;
 import org.project.spring_mini_project.utils.BaseResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping ("/api/v1/students")
+@RequestMapping("/api/v1/students")
 @RequiredArgsConstructor
 public class StudentRestController {
+
     private final StudentService studentService;
 
     @GetMapping
-    public BaseResponse<List<StudentRespone>> getAllStudents(){
+    public BaseResponse<List<StudentRespone>> getAllStudents( @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10")  int size){
         return BaseResponse.<List<StudentRespone>>ok()
-                .setPayload(studentService.getAllStudents());
+                .setPayload(studentService.getAllStudents(page,size));
+    }
+
+    @PostMapping
+    public BaseResponse<StudentRespone> createStudent(@RequestBody StudentCreateRequest studentCreateRequest){
+        return BaseResponse.<StudentRespone>createSuccess()
+                .setPayload(studentService.createStudent(studentCreateRequest));
+    }
+
+    @GetMapping("/{username}")
+    @Operation(summary = "Get student by username !")
+    @ResponseStatus(HttpStatus.NOT_EXTENDED)
+    public BaseResponse<StudentRespone> getStudentByUsername(
+
+            @Parameter(description = "Account id", required = true, example = "1")
+
+            @PathVariable  String username){
+        return BaseResponse.<StudentRespone>notFound()
+                .setPayload(studentService.getStudentByUsername(username));
+    }
+
+    @PutMapping("/{username}")
+    public BaseResponse<StudentRespone> updateStudentByUsername(@PathVariable String username, @RequestBody StudentUpdateRequest studentUpdateRequest){
+        return BaseResponse.<StudentRespone>notFound()
+                .setPayload(studentService.updateStudentByUsername(username, studentUpdateRequest));
     }
 }
