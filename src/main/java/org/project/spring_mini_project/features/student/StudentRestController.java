@@ -20,12 +20,14 @@ public class StudentRestController {
     private final StudentService studentService;
 
     @GetMapping
+    @Operation(summary = "Get all students !")
     public BaseResponse<List<StudentRespone>> getAllStudents( @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10")  int size){
         return BaseResponse.<List<StudentRespone>>ok()
                 .setPayload(studentService.getAllStudents(page,size));
     }
 
     @PostMapping
+    @Operation(summary = "Update Student !")
     public BaseResponse<StudentRespone> createStudent(@RequestBody StudentCreateRequest studentCreateRequest){
         return BaseResponse.<StudentRespone>createSuccess()
                 .setPayload(studentService.createStudent(studentCreateRequest));
@@ -33,10 +35,10 @@ public class StudentRestController {
 
     @GetMapping("/{username}")
     @Operation(summary = "Get student by username !")
-    @ResponseStatus(HttpStatus.NOT_EXTENDED)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public BaseResponse<StudentRespone> getStudentByUsername(
 
-            @Parameter(description = "Account id", required = true, example = "1")
+            @Parameter(description = "Student username", required = true, example = "john_doe")
 
             @PathVariable  String username){
         return BaseResponse.<StudentRespone>notFound()
@@ -44,8 +46,9 @@ public class StudentRestController {
     }
 
     @PutMapping("/{username}")
+    @Operation(summary = "update student by username !")
     public BaseResponse<StudentRespone> updateStudentByUsername(@PathVariable String username, @RequestBody StudentUpdateRequest studentUpdateRequest){
-        return BaseResponse.<StudentRespone>notFound()
+        return BaseResponse.<StudentRespone>updateSuccess()
                 .setPayload(studentService.updateStudentByUsername(username, studentUpdateRequest));
     }
 }

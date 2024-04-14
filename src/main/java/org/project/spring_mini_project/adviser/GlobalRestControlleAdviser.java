@@ -19,11 +19,9 @@ public class GlobalRestControlleAdviser {
     @ResponseStatus(HttpStatus.NOT_FOUND)
 
     public BaseResponse<?> handleNoSuchElementException(NoSuchElementException ex) {
-        return BaseResponse
-                .notFound()
-                .setMetadata(ex.getMessage());
+      return BaseResponse.notFound()
+                .setMessage(ex.getMessage());
     }
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
