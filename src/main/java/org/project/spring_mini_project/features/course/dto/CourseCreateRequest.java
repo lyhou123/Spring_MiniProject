@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record CourseCreateRequest(String title, String description, String alias, String thumbnail, boolean is_free, Long instructor_id, List<Long> category_ids) {
+public record CourseCreateRequest(String title, String description, String alias, String thumbnail, boolean is_free, Long instructor_id, Long Category_id) {
 }

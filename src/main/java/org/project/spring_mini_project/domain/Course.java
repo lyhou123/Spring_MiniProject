@@ -27,4 +27,18 @@ public class Course {
     private Instructor instructor;
 
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", alias='" + alias + '\'' +
+                ", description='" + description + '\'' +
+                ", is_deleted=" + is_deleted +
+                ", is_free=" + is_free +
+                ", thumbnail='" + thumbnail + '\'' +
+                ", title='" + title + '\'' +
+                // Do not include the 'categories' field in the toString method
+                '}';
+    }
+
 }
