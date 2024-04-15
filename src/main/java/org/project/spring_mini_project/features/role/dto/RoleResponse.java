@@ -4,5 +4,5 @@ import lombok.Builder;
 
 import java.util.Set;
 @Builder
-public record RoleResponse(Long id, String name, Set<Long> userIds, Set<RoleAuthorityResponse> authorities) {
+public record RoleResponse(Long id, String name, Set<RoleAuthorityResponse> authorities) {
 }

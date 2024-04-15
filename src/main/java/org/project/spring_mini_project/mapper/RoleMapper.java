@@ -14,16 +14,8 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
-    @Mapping(source = "users", target = "userIds", qualifiedByName = "mapUserSetToIdSet")
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "mapAuthoritySetToRoleAuthorityResponseSet")
     RoleResponse roleToRoleResponse(Role role);
-
-    @Named("mapUserSetToIdSet")
-    default Set<Long> mapUserSetToIdSet(Set<User> users) {
-        return users.stream()
-                .map(User::getId)
-                .collect(Collectors.toSet());
-    }
 
     @Named("mapAuthoritySetToRoleAuthorityResponseSet")
     default Set<RoleAuthorityResponse> mapAuthoritySetToRoleAuthorityResponseSet(Set<Authority> authorities) {
