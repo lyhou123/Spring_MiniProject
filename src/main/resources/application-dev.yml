@@ -3,9 +3,9 @@ server:
 #Congiguration for the database
 spring:
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/testing
+    url: jdbc:postgresql://localhost:5432/e_learning
     username: postgres
-    password: qwerty
+    password: lyhou123
     driver-class-name: org.postgresql.Driver
   servlet:
     multipart:
@@ -23,4 +23,5 @@ file_storage:
   client_path: "/images/**"
 springdoc:
   swagger-ui:
-    path: /api
+    path: /
+

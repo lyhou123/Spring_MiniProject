@@ -61,7 +61,7 @@ public class DataInitialize {
                         role.setAuthorities(filterAuthorities(authorities, "user:read", "user:write", "user:update","progress:read","elearning:read"));
                         break;
                     case "STUDENT":
-                        role.setAuthorities(filterAuthorities(authorities, "user:read", "user:write", "user:update","progress:read","elearning:read", "progress:write"));
+                        role.setAuthorities(filterAuthorities(authorities, "progress:write"));
                         break;
                     case "INSTRUCTOR":
                         role.setAuthorities(filterAuthorities(authorities, "user:read", "user:write", "user:update","progress:read","elearning:read",  "elearning:read", "elearning:write", "elearning:delete", "elearning:update"));

@@ -1,6 +1,5 @@
 spring:
-    application:
-        name: SpringDataJPA
-    profiles:
-      active: dev
-
+  application:
+    name: "mobile-banking-cstad"
+  profiles:
+    active: dev # configuration dev file
