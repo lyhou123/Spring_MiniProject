@@ -12,23 +12,18 @@ public class Course {
     private long id;
     @Column(unique = true, nullable = false)
     private String alias;
-
-    private Integer cat_id;
     private String description;
-    private Integer ins_id;
     private Boolean is_deleted;
     private Boolean is_free;
     private String thumbnail;
     private String title;
 
-    //category relationship
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cat_id", insertable = false, updatable = false)
-    private Categories category;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cat_id")
+    private Categories categories;
 
-    //instructor relationship
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ins_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ins_id")
     private Instructor instructor;
 
 

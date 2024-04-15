@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -12,7 +13,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String address1;
     private String address2;
     private Integer city_id;
@@ -38,7 +39,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    private String uuid;
+    private UUID uuid;
     private String verification_code;
 
     //relationship student
@@ -58,5 +59,24 @@ public class User {
     )
     private Set<Role> roles;
 
+
+
+    @PrePersist
+    public void generateUuid() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((username == null) ? 0 : username.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        // do not include roles in the hashCode calculation
+        return result;
+    }
 
 }
