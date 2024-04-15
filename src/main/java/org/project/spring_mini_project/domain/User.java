@@ -20,7 +20,7 @@ public class User {
     private Integer country_id;
     private Date dob;
 
-    @Column( nullable = false)
+    @Column(unique = true,nullable = false)
     private String email;
     private String family_name;
     private String gender;
@@ -34,8 +34,7 @@ public class User {
     private String phone_number;
     private String profile;
 
-    @Column(nullable = false)
-
+    @Column(unique = true,nullable = false)
     private String username;
 
     @Column(nullable = false)

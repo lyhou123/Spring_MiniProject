@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -72,6 +73,11 @@ public class CategoryServiceImpl implements CategoryService{
         // Find the category by alias
         Categories category = categoryRepository.findCategoriesByAlias(alias);
 
+        // Check if the category is null and throw an exception if it is
+        if (category == null) {
+            throw new NoSuchElementException("Category not found");
+        }
+
         // Convert to CategoryResponse and return
         return categoryMapper.responseToCategory(category);
     }
@@ -95,7 +101,7 @@ public class CategoryServiceImpl implements CategoryService{
     public CategoryResponse disableCategory(String alias) {
     int affectedRows = categoryRepository.updateIsDeletedStatusByAlias(alias, true);
     if (affectedRows == 0) {
-        throw new RuntimeException("Category not found");
+        throw new NoSuchElementException("Category not found");
     }
     return findCategoryByAlias(alias);
     }
@@ -104,7 +110,7 @@ public class CategoryServiceImpl implements CategoryService{
     public CategoryResponse enableCategory(String alias) {
     int affectedRows = categoryRepository.updateIsDeletedStatusByAlias(alias, false);
     if (affectedRows == 0) {
-        throw new RuntimeException("Category not found");
+        throw new NoSuchElementException("Category not found");
     }
     return findCategoryByAlias(alias);
     }
