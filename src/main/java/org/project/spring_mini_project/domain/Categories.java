@@ -16,7 +16,7 @@ public class Categories {
     private String icon;
     private Boolean isDeleted;
     private String name;
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categories", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Course> courses;
 
     // Self-referencing relationship

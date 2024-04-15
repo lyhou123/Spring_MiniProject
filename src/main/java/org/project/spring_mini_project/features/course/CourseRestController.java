@@ -1,12 +1,55 @@
 package org.project.spring_mini_project.features.course;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.project.spring_mini_project.features.course.dto.*;
+import org.project.spring_mini_project.utils.BaseResponse;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/courses")
 public class CourseRestController{
+    private final CourseService courseService;
+
+    @PostMapping
+    public BaseResponse<CourseResponse> createCourse(@RequestBody CourseCreateRequest request){
+        CourseResponse courseResponse = courseService.createCourse(request);
+        return BaseResponse.<CourseResponse>createSuccess()
+                .setPayload(courseResponse);
+    }
+
+    @GetMapping
+    public BaseResponse<List<CourseResponse>> findAllCourses(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        return BaseResponse.<List<CourseResponse>>ok()
+                .setPayload(courseService.findAllCourses(page, size));
+    }
+    @PutMapping("/{alias}")
+    public BaseResponse<CourseResponse> updateCourse(@PathVariable String alias, @RequestBody CourseUpdateRequest request){
+        CourseResponse courseResponse = courseService.updateCourse(alias, request);
+        return BaseResponse.<CourseResponse>ok()
+                .setPayload(courseResponse);
+    }
+    @GetMapping("/{alias}")
+    public BaseResponse<CourseDetailsResponse> findCourseDetails(@PathVariable String alias){
+        CourseDetailsResponse courseDetailsResponse = courseService.findCourseDetails(alias);
+        return BaseResponse.<CourseDetailsResponse>ok()
+                .setPayload(courseDetailsResponse);
+    }
+    @PutMapping("/{alias}/categories")
+    public BaseResponse<CourseResponse> updateCourseCategories(@PathVariable String alias, @RequestBody CourseCategoryRequest request){
+        CourseResponse courseResponse = courseService.updateCourseCategories(alias, request);
+        return BaseResponse.<CourseResponse>ok()
+                .setPayload(courseResponse);
+    }
+    @PutMapping("/{alias}/disable")
+    public BaseResponse<CourseResponse> disableCourse(@PathVariable String alias){
+        CourseResponse courseResponse = courseService.disableCourse(alias);
+        return BaseResponse.<CourseResponse>ok()
+                .setPayload(courseResponse);
+    }
+
+
 }
