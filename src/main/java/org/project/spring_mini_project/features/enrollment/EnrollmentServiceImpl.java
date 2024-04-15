@@ -1,7 +1,9 @@
 package org.project.spring_mini_project.features.enrollment;
 
 import lombok.RequiredArgsConstructor;
+import org.project.spring_mini_project.domain.Course;
 import org.project.spring_mini_project.domain.Enrollment;
+import org.project.spring_mini_project.domain.Student;
 import org.project.spring_mini_project.features.course.CourseRepository;
 import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressRespone;
 import org.project.spring_mini_project.features.enrollment.dto.EnrollmentRespone;
@@ -28,6 +30,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     private final EnrollmentMapper enrollmentMapper;
 
+
+
     @Override
     public EnrollmentRespone createEnrollment(EnrollmentProgressRequest enrollmentProgressRequest) {
 
@@ -45,7 +49,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         enrollment.setStudent(student);
 
-//        enrollment.setCourse_id(Set.of(course));
+        enrollment.setCourse(course);
+
+        //set course name and student name
+        String courseName = course.getTitle();
+        enrollment.getCourse().setTitle(courseName);
 
         var saveEnrollment=enrollmentRepository.save(enrollment);
 
@@ -75,7 +83,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 );
         var newEnrollment=enrollmentMapper.mapEnrollmentRequestToEnrollment(enrollmentProgressRequest);
 
-//        newEnrollment.getCourse_id().addAll(enrollment.getCourse_id());
+        newEnrollment.setId(enrollment.getId());
 
         var enrollMent= enrollmentRepository.save(newEnrollment);
 

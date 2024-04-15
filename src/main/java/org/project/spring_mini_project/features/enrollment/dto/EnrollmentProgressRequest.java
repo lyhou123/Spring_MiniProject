@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 
 public record EnrollmentProgressRequest(
         String code,
-        Long course_id,
+        long course_id,
         LocalDateTime enrolled_at,
         Boolean is_deleted,
         Boolean is_certified,
         Integer progress,
-        Long student_id
+        Integer student_id
 
 ) {
 }

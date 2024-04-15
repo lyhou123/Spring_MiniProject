@@ -3,6 +3,8 @@ package org.project.spring_mini_project.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "courses")
 @Data
@@ -25,6 +27,9 @@ public class Course {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ins_id")
     private Instructor instructor;
+
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private Set<Enrollment> enrollments;
 
 //    @ManyToOne(cascade = CascadeType.PERSIST)
 //    @JoinColumn(name = "course_id")
