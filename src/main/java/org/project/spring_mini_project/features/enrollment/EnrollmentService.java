@@ -19,4 +19,6 @@ public interface EnrollmentService {
 
     EnrollmentRespone disableEnrollment(Long id);
 
+    List<EnrollmentRespone> getAllEnrollments();
+
 }

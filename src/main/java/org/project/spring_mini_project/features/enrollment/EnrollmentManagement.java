@@ -83,4 +83,13 @@ public class EnrollmentManagement {
 
                 .setPayload(enrollmentService.disableEnrollment(code));
     }
+
+    @GetMapping("/all")
+    @Operation(summary = "Get all enrollments")
+    public BaseResponse<List<EnrollmentRespone>> getAllEnrollments(){
+
+        return BaseResponse.<List<EnrollmentRespone>>ok()
+
+                .setPayload(enrollmentService.getAllEnrollments());
+    }
 }

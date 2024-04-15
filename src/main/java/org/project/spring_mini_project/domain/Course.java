@@ -26,10 +26,9 @@ public class Course {
     @JoinColumn(name = "ins_id")
     private Instructor instructor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    private Enrollment enrollment;
-
+//    @ManyToOne(cascade = CascadeType.PERSIST)
+//    @JoinColumn(name = "course_id")
+//    private Enrollment enrollment;
     @Override
     public String toString() {
         return "Course{" +

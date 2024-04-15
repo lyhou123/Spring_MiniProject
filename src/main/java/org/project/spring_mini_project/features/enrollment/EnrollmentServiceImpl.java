@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +45,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         enrollment.setStudent(student);
 
-        enrollment.getCourse_id().add(course);
+//        enrollment.setCourse_id(Set.of(course));
 
         var saveEnrollment=enrollmentRepository.save(enrollment);
 
@@ -74,7 +75,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 );
         var newEnrollment=enrollmentMapper.mapEnrollmentRequestToEnrollment(enrollmentProgressRequest);
 
-        newEnrollment.getCourse_id().addAll(enrollment.getCourse_id());
+//        newEnrollment.getCourse_id().addAll(enrollment.getCourse_id());
 
         var enrollMent= enrollmentRepository.save(newEnrollment);
 
@@ -103,6 +104,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                     "User with id = " + id + " doesn't exist ! "
             );
         }
+    }
+
+    @Override
+    public List<EnrollmentRespone> getAllEnrollments() {
+        var enroll= enrollmentRepository.findAll();
+        return enroll.stream().map(enrollmentMapper::maptoEnrollMentRespone).collect(Collectors.toList());
     }
 
 

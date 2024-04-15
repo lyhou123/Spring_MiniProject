@@ -21,8 +21,9 @@ public class Enrollment {
 
 
     //relationship
-    @OneToMany(mappedBy = "enrollment",fetch = FetchType.LAZY)
-    private Set<Course> course_id;
+//    @OneToMany(mappedBy = "enrollment",fetch = FetchType.LAZY)
+//    private Set<Course> course_id;
+    private long course_id;
     private LocalDateTime enrolled_at;
     private Boolean is_deleted;
     private Boolean is_certified;
