@@ -16,8 +16,14 @@ public class User {
     private Long id;
     private String address1;
     private String address2;
-    private Integer city_id;
-    private Integer country_id;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "city_id")
+    private City city;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "country_id")
+    private Country country;
+
     private Date dob;
 
     @Column(unique = true,nullable = false)
@@ -65,6 +71,31 @@ public class User {
         if (uuid == null) {
             uuid = UUID.randomUUID();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", address1='" + address1 + '\'' +
+                ", address2='" + address2 + '\'' +
+                ", city_id=" + (city != null ? city.getId() : "null") +
+                ", country_id=" + (country != null ? country.getId() : "null") +
+                ", dob=" + dob +
+                ", email='" + email + '\'' +
+                ", family_name='" + family_name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", given_name='" + given_name + '\'' +
+                ", is_deleted=" + is_deleted +
+                ", is_verified=" + is_verified +
+                ", national_id_card='" + national_id_card + '\'' +
+                ", password='" + password + '\'' +
+                ", phone_number='" + phone_number + '\'' +
+                ", profile='" + profile + '\'' +
+                ", username='" + username + '\'' +
+                ", uuid=" + uuid +
+                ", verification_code='" + verification_code + '\'' +
+                '}';
     }
 
     @Override

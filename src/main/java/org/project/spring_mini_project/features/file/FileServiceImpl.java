@@ -1,7 +1,7 @@
-package org.project.spring_mini_project.file;
+package org.project.spring_mini_project.features.file;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.project.spring_mini_project.file.dto.FileResponse;
+import org.project.spring_mini_project.features.file.dto.FileResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -29,15 +29,12 @@ public class FileServiceImpl implements FileService {
     @Value("${file_storage.image_location}")
     String fileStorageDir;
 
-
     private static final Set<String> SUPPORTED_IMAGE_TYPES = Set.of(
             MediaType.IMAGE_JPEG_VALUE,
             MediaType.IMAGE_PNG_VALUE,
             MediaType.IMAGE_GIF_VALUE
     );
 
-
-    //http://localhost:8888/api/v1/files/download/3f54df29-31f0-4c74-9552-62dfca9e4f1e.png
     private String generateImageUrl(HttpServletRequest request, String filename) {
         return String.format("%s://%s:%d/images/%s",
                 request.getScheme(),

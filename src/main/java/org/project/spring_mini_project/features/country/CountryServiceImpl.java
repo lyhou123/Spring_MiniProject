@@ -1,62 +1,50 @@
 package org.project.spring_mini_project.features.country;
 
 import lombok.RequiredArgsConstructor;
+import org.project.spring_mini_project.domain.City;
 import org.project.spring_mini_project.domain.Country;
-import org.project.spring_mini_project.features.country.dto.CountryRespone;
+import org.project.spring_mini_project.features.city.CityRepository;
+import org.project.spring_mini_project.features.country.dto.CityResponse;
+import org.project.spring_mini_project.features.country.dto.CountryDetailResponse;
+import org.project.spring_mini_project.features.country.dto.CountryResponse;
+import org.project.spring_mini_project.mapper.CityMapper;
 import org.project.spring_mini_project.mapper.CountryMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import java.util.Arrays;
-import java.util.Comparator;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CountryServiceImpl implements CountryService {
 
-    @Override
-    public void fetchAndSaveCountries() {
-
-    }
-
     private final CountryRepository countryRepository;
-
     private final CountryMapper countryMapper;
+    private final CityRepository cityRepository;
+    private final CityMapper cityMapper;
+
 
     @Override
-    public List<CountryRespone> getAllCountries(String sortBy, String filterByName) {
-
-        List<Country> countries = fetchCountries();
-
-        sortCountries(countries, sortBy);
-        filterCountriesByName(countries, filterByName);
+    public List<CountryDetailResponse> getAllCountries(String name, Sort.Direction sort) {
+        List<Country> countries = countryRepository.findAll(Sort.by(sort, "name"));
 
         return countries.stream()
-                .map(countryMapper::mapToCountryRespone)
-                .toList();
+                .filter(country -> name == null || country.getName().toLowerCase().contains(name.toLowerCase()))
+                .map(countryMapper::mapToCountryDetailResponse)
+                .collect(Collectors.toList());
     }
 
-    private List<Country> fetchCountries() {
-        RestTemplate restTemplate = new RestTemplate();
-        String apiUrl = "https://restcountries.com/v3.1/all";
-        Country[] countries = restTemplate.getForObject(apiUrl, Country[].class);
-        return List.of(countries);
-    }
-
-    private void sortCountries(List<Country> countries, String sortBy) {
-        if ("name".equalsIgnoreCase(sortBy)) {
-            countries.sort((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()));
+    @Override
+    public List<CityResponse> getCitiesByCountryIso(String iso) {
+        List<City> cities = cityRepository.findCityByCountry_Iso(iso);
+        if (cities == null) {
+            throw new NoSuchElementException("Country not found");
         }
+        System.out.println(cities);
+        return cities.stream()
+                .map(cityMapper::toCityResponse)
+                .collect(Collectors.toList());
     }
-
-    private void filterCountriesByName(List<Country> countries, String filterByName) {
-
-        if (filterByName != null && !filterByName.isEmpty()) {
-            String filterLowerCase = filterByName.toLowerCase();
-            countries.removeIf(country -> !country.getName().toLowerCase().contains(filterLowerCase));
-        }
-    }
-
-
 }

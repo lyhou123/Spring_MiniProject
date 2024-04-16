@@ -1,4 +1,4 @@
-package org.project.spring_mini_project.file.dto;
+package org.project.spring_mini_project.features.file.dto;
 
 import lombok.Builder;
 
