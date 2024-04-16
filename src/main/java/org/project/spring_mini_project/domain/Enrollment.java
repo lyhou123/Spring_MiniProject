@@ -32,6 +32,6 @@ public class Enrollment {
 
     //relationship
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", insertable = false, updatable = false)
+    @JoinColumn(name = "student_id")
     private Student student;
 }

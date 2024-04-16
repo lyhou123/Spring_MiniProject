@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record EnrollmentProgressResponse(
         Long id,
-        Integer progress
+        Integer progress,
+        Boolean is_certified
 ) {
 }

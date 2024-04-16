@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public record EnrollmentRequest(
-        @NotEmpty
+        @NotNull
         String code,
           @NotNull
         Long course_id,
         @NotNull
-        Long student_id) {
+        Integer student_id) {
 }

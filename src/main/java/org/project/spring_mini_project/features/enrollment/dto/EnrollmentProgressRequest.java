@@ -11,13 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 public record EnrollmentProgressRequest(
 
-        String code,
-        long course_id,
-        LocalDateTime enrolledAt,
-        Boolean is_deleted,
-        Boolean is_certified,
-        Integer progress,
-        Integer student_id
+        Integer progress
+
 
 ) {
 }

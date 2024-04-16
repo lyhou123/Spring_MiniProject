@@ -16,6 +16,6 @@ public interface EnrollmentService {
     EnrollmentResponse certifyEnrollment(String code);
     EnrollmentResponse discardEnrollment(String code);
 
-    List<EnrollmentResponse> getEnrollmentsByStudentId();
+
 
 }

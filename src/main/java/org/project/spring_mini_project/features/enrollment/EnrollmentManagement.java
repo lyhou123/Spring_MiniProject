@@ -20,7 +20,7 @@ public class EnrollmentManagement {
 
     @GetMapping
     @Operation(summary = "Get all enrollments")
-    public BaseResponse<List<EnrollmentResponse>> getEnrollments(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,@RequestParam(required = false) String code, @RequestParam(required = false) String courseTitle, @RequestParam(required = false) String courseCategory, @RequestParam(required = false) String studentUsername, @RequestParam(required = false) Boolean is_certified) {
+    public BaseResponse<List<EnrollmentResponse>> getEnrollments(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size,@RequestParam(required = false) String code, @RequestParam(required = false) String courseTitle, @RequestParam(required = false) String courseCategory, @RequestParam(required = false) String studentUsername, @RequestParam(required = false) Boolean is_certified) {
         return BaseResponse.<List<EnrollmentResponse>>ok()
                 .setPayload(enrollmentService.getEnrollments(page,size, code, courseTitle, courseCategory, studentUsername, is_certified));
     }
@@ -68,11 +68,6 @@ public class EnrollmentManagement {
                 .setPayload(enrollmentService.discardEnrollment(code));
     }
 
-    @GetMapping("/student")
-    @Operation(summary = "Get all enrollments ")
-    public BaseResponse<List<EnrollmentResponse>> getEnrollmentsByStudentId() {
-        return BaseResponse.<List<EnrollmentResponse>>ok()
-                .setPayload(enrollmentService.getEnrollmentsByStudentId());
-    }
+
 
 }

@@ -46,7 +46,10 @@ public class StudentServiceImpl implements StudentService {
                 );
 
         var student=studentMapper.mapStudentRequestToStudent(studentCreateRequest);
+
         student.setUser(owner);
+
+        student.setIs_blocked(false);
 
         var saveStudent=studentRepository.save(student);
 

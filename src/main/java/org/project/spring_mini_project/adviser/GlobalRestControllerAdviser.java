@@ -50,6 +50,9 @@ public class GlobalRestControllerAdviser {
         } else if (message.contains("national_id_card")) {
             return BaseResponse.badRequest()
                     .setMetadata("National ID Card already exists");
+        } else if (message.contains("user_id")) {
+            return BaseResponse.badRequest()
+                    .setMetadata("User ID already exists");
         } else {
             // Handle other types of DataIntegrityViolationException or return a generic message
             return BaseResponse.badRequest()
@@ -63,6 +66,9 @@ public class GlobalRestControllerAdviser {
         return new ResponseEntity<>(e.getReason(), e.getStatusCode());
     }
 
-
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
 }

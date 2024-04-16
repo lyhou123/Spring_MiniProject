@@ -14,7 +14,7 @@ import org.project.spring_mini_project.features.user.UserRepository;
 @Mapper(componentModel = "spring")
 public interface StudentMapper {
 
-//    @Mapping(source = "user", target = "user_id", qualifiedByName = "mapUserToUserId")
+   @Mapping(source = "user", target = "user_id", qualifiedByName = "mapUserToUserId")
 
     StudentRespone mapStudentToStudentResponse(Student student);
 
@@ -22,18 +22,9 @@ public interface StudentMapper {
 
     Student mapStudentRequestToStudent(StudentUpdateRequest studentUpdateRequest);
 
-//    @Named("mapUserToUserId")
-//    default Long mapUserToUserId(User user) {
-//        return user != null ? user.getId() : null;
-//    }
-//
-//    @Named("mapUserIdToUser")
-//
-//    default User mapUserIdToUser(Long userId, @Context UserRepository userRepository) {
-//        if (userId == null) {
-//            return null;
-//        }
-//
-//        return userRepository.findById(userId).orElse(null);
-//    }
+  @Named("mapUserToUserId")
+    default Long mapUserToUserId(User user) {
+        return user != null ? user.getId() : null;
+    }
+
 }

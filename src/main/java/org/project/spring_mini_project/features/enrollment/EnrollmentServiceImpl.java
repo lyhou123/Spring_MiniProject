@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -32,24 +34,35 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public EnrollmentResponse enrollStudent(EnrollmentRequest enrollmentRequest) {
-        Course course = courseRepository.findById(enrollmentRequest.course_id())
+
+        var course = courseRepository.findById(enrollmentRequest.course_id())
                 .orElseThrow(() -> new NoSuchElementException( "Course not found"));
-        Student student = studentRepository.findStudentById(enrollmentRequest.student_id().intValue());
-        if (student == null) {
-            throw new NoSuchElementException("Student not found");
-        }
+       var student= studentRepository.findById(enrollmentRequest.student_id())
+                .orElseThrow(() -> new NoSuchElementException("Student not found"));
         var enrollment = enrollmentMapper.toEnrollment(enrollmentRequest);
-        enrollment.setStudent(student);
 
         // Set the Course object to the Enrollment object
+        enrollment.setEnrolledAt(LocalDateTime.now());
+        enrollment.setIs_deleted(false);
+        enrollment.setIs_certified(false);
+        enrollment.setProgress(0);
         enrollment.setCourse(course);
+        enrollment.setStudent(student);
         enrollment = enrollmentRepository.save(enrollment);
+
         return enrollmentMapper.toEnrollmentResponse(enrollment);
     }
 
     @Override
     public List<EnrollmentResponse> getEnrollments(int page, int size, String code, String courseTitle, String courseCategory, String studentUsername, Boolean is_certified) {
-        String isCertifiedString = (is_certified == null) ? "true" : is_certified.toString();
+
+        //starting fix page index size because page index start from index 0
+        int fixedPage = page - 1;
+
+//        String isCertifiedString = (is_certified == null) ? "true" : is_certified.toString();
+
+        String isCertifiedString = (is_certified != null) ? is_certified.toString() : null;
+
         Specification<Enrollment> spec = Specification
                 .where(new EnrollmentSpecification("code", code))
                 .and(new EnrollmentSpecification("courseTitle", courseTitle))
@@ -57,9 +70,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .and(new EnrollmentSpecification("studentUserUsername", studentUsername))
                 .and(new EnrollmentSpecification("isCertified", isCertifiedString)
                 );
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "enrolledAt"));
+
+        Pageable pageable = PageRequest.of(fixedPage, size, Sort.by(Sort.Direction.ASC, "enrolledAt"));
         Page<Enrollment> enrollmentsPage = enrollmentRepository.findAll(spec, pageable);
         List<Enrollment> enrollments = enrollmentsPage.getContent();
+
         return enrollments.stream()
                 .map(enrollmentMapper::toEnrollmentResponse)
                 .collect(Collectors.toList());
@@ -68,6 +83,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public EnrollmentResponse getEnrollmentByCode(String code) {
+
         Enrollment enrollment = enrollmentRepository.findByCode(code);
         if (enrollment == null) {
             throw new NoSuchElementException("Enrollment not found");
@@ -81,7 +97,21 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         if (enrollment == null) {
             throw new NoSuchElementException("Enrollment not found");
         }
-        enrollment.setProgress(enrollmentProgressRequest.progress());
+        //validation ot value progress
+        int progressValue = enrollmentProgressRequest.progress();
+
+        if(progressValue >= 0 && progressValue <= 100) {
+            if(progressValue == 100) {
+                enrollment.setIs_certified(true);
+            } else {
+                enrollment.setIs_certified(false);
+            }
+        } else {
+            throw new IllegalArgumentException("Progress value must be between 0 and 100");
+        }
+        enrollment.setProgress(enrollmentProgressRequest.progress()
+
+        );
         enrollment = enrollmentRepository.save(enrollment);
         return enrollmentMapper.toEnrollmentProgressResponse(enrollment);
     }
@@ -101,6 +131,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         if (enrollment == null) {
             throw new NoSuchElementException("Enrollment not found");
         }
+        enrollment.setProgress(100);
         enrollment.setIs_certified(true);
         enrollment = enrollmentRepository.save(enrollment);
         return enrollmentMapper.toEnrollmentResponse(enrollment);
@@ -114,11 +145,5 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         return enrollmentMapper.toEnrollmentResponse(enrollment);
     }
 
-    @Override
-    public List<EnrollmentResponse> getEnrollmentsByStudentId() {
-        var enrollment = enrollmentRepository.findAll();
-        return enrollment.stream()
-                .map(enrollmentMapper::toEnrollmentResponse)
-                .collect(Collectors.toList());
-    }
+
 }
