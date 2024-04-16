@@ -13,7 +13,7 @@ public record EnrollmentProgressRequest(
 
         String code,
         long course_id,
-        LocalDateTime enrolled_at,
+        LocalDateTime enrolledAt,
         Boolean is_deleted,
         Boolean is_certified,
         Integer progress,

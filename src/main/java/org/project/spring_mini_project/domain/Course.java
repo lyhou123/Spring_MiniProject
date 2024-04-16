@@ -28,8 +28,8 @@ public class Course {
     @JoinColumn(name = "ins_id")
     private Instructor instructor;
 
-//    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-//    private Set<Enrollment> enrollments;
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private Set<Enrollment> enrollments;
 
 //    @ManyToOne(cascade = CascadeType.PERSIST)
 //    @JoinColumn(name = "course_id")

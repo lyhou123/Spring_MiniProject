@@ -24,7 +24,7 @@ public class Enrollment {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    private LocalDateTime enrolled_at;
+    private LocalDateTime enrolledAt;
 
     private Boolean is_deleted;
     private Boolean is_certified;
