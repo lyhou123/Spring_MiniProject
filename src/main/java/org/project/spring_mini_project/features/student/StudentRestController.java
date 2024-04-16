@@ -2,6 +2,7 @@ package org.project.spring_mini_project.features.student;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.project.spring_mini_project.features.student.dto.StudentCreateRequest;
 import org.project.spring_mini_project.features.student.dto.StudentRespone;
@@ -27,8 +28,8 @@ public class StudentRestController {
     }
 
     @PostMapping
-    @Operation(summary = "Update Student !")
-    public BaseResponse<StudentRespone> createStudent(@RequestBody StudentCreateRequest studentCreateRequest){
+    @Operation(summary = "Create Student !")
+    public BaseResponse<StudentRespone> createStudent(@Valid @RequestBody StudentCreateRequest studentCreateRequest){
         return BaseResponse.<StudentRespone>createSuccess()
                 .setPayload(studentService.createStudent(studentCreateRequest));
     }

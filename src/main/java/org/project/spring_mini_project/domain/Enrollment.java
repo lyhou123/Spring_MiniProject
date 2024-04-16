@@ -19,13 +19,13 @@ public class Enrollment {
     @Column(nullable = false)
     private String code;
 
-
    // relationship
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id",insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id")
     private Course course;
-//    private long course_id;
+
     private LocalDateTime enrolled_at;
+
     private Boolean is_deleted;
     private Boolean is_certified;
     private Integer progress;

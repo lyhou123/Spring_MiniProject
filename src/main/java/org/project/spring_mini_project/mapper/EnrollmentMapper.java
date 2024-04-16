@@ -5,28 +5,34 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.project.spring_mini_project.domain.Course;
 import org.project.spring_mini_project.domain.Enrollment;
-import org.project.spring_mini_project.domain.Student;
 import org.project.spring_mini_project.domain.User;
 import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressRequest;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressRespone;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentRespone;
+import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressResponse;
+import org.project.spring_mini_project.features.enrollment.dto.EnrollmentRequest;
+import org.project.spring_mini_project.features.enrollment.dto.EnrollmentResponse;
 
 @Mapper(componentModel = "spring")
 public interface EnrollmentMapper {
-//    @Mapping(target = "course_id", ignore = true)
 
-    @Mapping(source = "student", target = "student_id", qualifiedByName = "mapUserToUserId")
-    EnrollmentRespone maptoEnrollMentRespone(Enrollment enrollment);
+    @Mapping(target = "courseTitle", source = "course.title")
+    @Mapping(target = "courseCategory", source = "course.categories.name") // changed to 'course.categories.name'
+    @Mapping(target = "studentName", source = "student.user.username")
+    EnrollmentResponse toEnrollmentResponse(Enrollment enrollment);
+    EnrollmentRequest toEnrollmentRequest(Enrollment enrollment);
 
-//    @Mapping(target = "course_id", ignore = true)
-    Enrollment mapEnrollmentRequestToEnrollment(EnrollmentProgressRequest enrollmentProgressRequest);
+    EnrollmentProgressResponse toEnrollmentProgressResponse(Enrollment enrollment);
 
-    EnrollmentProgressRespone maptoEnrollMentProgressRespone(Enrollment enrollment);
+    Enrollment toEnrollmentProgress(EnrollmentProgressRequest enrollmentProgressRequest);
 
-    @Named("mapUserToUserId")
-    default Integer mapUserToUserId(Student student) {
-        return student != null ? student.getId() : null;
+    Enrollment toEnrollment(EnrollmentRequest enrollmentRequest);
+
+    @Named("mapCourseToString")
+    default String mapCourseToString(Course course) {
+        return course.getTitle();
     }
 
-
+    @Named("mapUserToString")
+    default String mapUserToString(User user) {
+        return user.getGiven_name();
+    }
 }
