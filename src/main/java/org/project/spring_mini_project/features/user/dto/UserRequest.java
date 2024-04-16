@@ -30,6 +30,8 @@ public record UserRequest(
         String email,
         String phone_number,
         String profile,
+        Integer city_id,
+        Long country_id,
 //        @NotEmpty
 //        @DateTimeFormat(pattern = "yyyy-MM-dd")
 //        LocalDate dob,

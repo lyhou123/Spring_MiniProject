@@ -1,7 +1,7 @@
-package org.project.spring_mini_project.file;
+package org.project.spring_mini_project.features.file;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.project.spring_mini_project.file.dto.FileResponse;
+import org.project.spring_mini_project.features.file.dto.FileResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +19,6 @@ public interface FileService {
     ResponseEntity<Resource> serveFile(String filename, HttpServletRequest request);
 
     FileResponse deleteFile(String filename,HttpServletRequest request);
-
-
 
     List<FileResponse> getAllFiles(HttpServletRequest request);
 }

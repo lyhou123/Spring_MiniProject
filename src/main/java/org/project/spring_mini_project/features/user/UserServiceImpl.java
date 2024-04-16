@@ -1,8 +1,12 @@
 package org.project.spring_mini_project.features.user;
 
 import lombok.RequiredArgsConstructor;
+import org.project.spring_mini_project.domain.City;
+import org.project.spring_mini_project.domain.Country;
 import org.project.spring_mini_project.domain.Role;
 import org.project.spring_mini_project.domain.User;
+import org.project.spring_mini_project.features.city.CityRepository;
+import org.project.spring_mini_project.features.country.CountryRepository;
 import org.project.spring_mini_project.features.role.RoleRepository;
 import org.project.spring_mini_project.features.user.dto.UserDetailsResponse;
 import org.project.spring_mini_project.features.user.dto.UserRequest;
@@ -24,6 +28,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+    private final CityRepository cityRepository;
+    private final CountryRepository countryRepository;
 
     @Override
     public List<UserDetailsResponse> findAllUsers(String username, String email, String national_id_card, String phone_number, String given_name, String gender, Set<String> roleNames) {
@@ -54,14 +60,21 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = new HashSet<>();
         for (String roleName : userRequest.roleNames()) {
             Role role = roleRepository.findByName(roleName)
-                    .orElseThrow(() -> new RuntimeException("Role not found with name: " + roleName));
+                    .orElseThrow(() -> new NoSuchElementException("Role not found with name: " + roleName));
             roles.add(role);
         }
 
         user.setRoles(roles);
 
-        User savedUser = userRepository.save(user);
+        City city = cityRepository.findById(userRequest.city_id())
+                .orElseThrow(() -> new NoSuchElementException("City not found !!! " ));
+        user.setCity(city);
 
+        Country country = countryRepository.findById(userRequest.country_id())
+                .orElseThrow(() -> new NoSuchElementException("Country not found !!! " ));
+        user.setCountry(country);
+
+        User savedUser = userRepository.save(user);
         return userMapper.userToUserDetailsResponse(savedUser);
     }
 
