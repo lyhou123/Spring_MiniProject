@@ -20,17 +20,17 @@ public class Enrollment {
     private String code;
 
 
-    //relationship
-//    @OneToMany(mappedBy = "enrollment",fetch = FetchType.LAZY)
-//    private Set<Course> course_id;
-    private long course_id;
-    private LocalDateTime enrolled_at;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id")
+    private Course course;
+
+    private LocalDateTime enrolledAt;
     private Boolean is_deleted;
     private Boolean is_certified;
     private Integer progress;
 
     //relationship
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id", insertable = false, updatable = false)
     private Student student;
 }

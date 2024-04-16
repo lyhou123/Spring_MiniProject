@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -39,8 +40,7 @@ public class StudentServiceImpl implements StudentService {
     public StudentRespone createStudent(StudentCreateRequest studentCreateRequest) {
         var owner = userRepository.findById(studentCreateRequest.user_id())
                 .orElseThrow(
-                        () -> new ResponseStatusException(
-                                HttpStatus.BAD_REQUEST,
+                        () -> new NoSuchElementException(
                                 "User ID = " + studentCreateRequest.user_id() + " is not a valid user"
                         )
                 );
@@ -60,8 +60,7 @@ public class StudentServiceImpl implements StudentService {
 
         var student=studentRepository.findByUserUsername(username)
                 .orElseThrow(
-                        ()->new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        ()->new NoSuchElementException(
                                 "Student with username = "+username+" not found"
                         )
                 );
@@ -73,8 +72,7 @@ public class StudentServiceImpl implements StudentService {
 
         var findStudent=studentRepository.findByUserUsername(username)
                 .orElseThrow(
-                        ()->new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        ()->new NoSuchElementException(
                                 "Student with username = "+username+" not found"
                         )
                 );
@@ -83,6 +81,4 @@ public class StudentServiceImpl implements StudentService {
 
         return studentMapper.mapStudentToStudentResponse(studentRepository.save(updateStudent));
     }
-
-
 }

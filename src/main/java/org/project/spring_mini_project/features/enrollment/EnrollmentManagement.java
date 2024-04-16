@@ -1,10 +1,12 @@
 package org.project.spring_mini_project.features.enrollment;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressRequest;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressRespone;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentRespone;
+import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressResponse;
+import org.project.spring_mini_project.features.enrollment.dto.EnrollmentRequest;
+import org.project.spring_mini_project.features.enrollment.dto.EnrollmentResponse;
 import org.project.spring_mini_project.utils.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,82 +16,56 @@ import java.util.List;
 @RequestMapping ("/api/v1/enrollments")
 @RequiredArgsConstructor
 public class EnrollmentManagement {
-
     private final EnrollmentService enrollmentService;
 
+    @GetMapping
+    @Operation(summary = "Get all enrollments")
+    public BaseResponse<List<EnrollmentResponse>> getEnrollments(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,@RequestParam(required = false) String code, @RequestParam(required = false) String courseTitle, @RequestParam(required = false) String courseCategory, @RequestParam(required = false) String studentUsername, @RequestParam(required = false) Boolean is_certified) {
+        return BaseResponse.<List<EnrollmentResponse>>ok()
+                .setPayload(enrollmentService.getEnrollments(page,size, code, courseTitle, courseCategory, studentUsername, is_certified));
+    }
+
     @PostMapping
-    @Operation(summary = "Create Enrollment")
-    public BaseResponse<EnrollmentRespone> getAllEnrollments(@RequestBody EnrollmentProgressRequest enrollmentProgressRequest){
-
-        return BaseResponse.<EnrollmentRespone>ok()
-
-                .setPayload(enrollmentService.createEnrollment(enrollmentProgressRequest));
+    @Operation(summary = "Enroll a student")
+    public BaseResponse<EnrollmentResponse> enrollStudent(@Valid @RequestBody EnrollmentRequest enrollmentRequest) {
+        EnrollmentResponse enrollmentResponse = enrollmentService.enrollStudent(enrollmentRequest);
+        return BaseResponse.<EnrollmentResponse>createSuccess()
+                .setPayload(enrollmentResponse);
     }
 
     @GetMapping("/{code}")
-    @Operation(summary = "Get Enrollment by code")
-    public BaseResponse<EnrollmentRespone> getEnrollment(@PathVariable Long code){
-
-        return BaseResponse.<EnrollmentRespone>ok()
-
-                .setPayload(enrollmentService.getEnrollment(code));
-    }
-
-    @GetMapping
-    @Operation(summary = "Get Enrollment Sort by enrolledAt\n" +
-            "Filter by code, course’s title, course’s category, student’s username, isCertified\n")
-
-    public BaseResponse<List<EnrollmentRespone>> getEnrollments(
-
-            @RequestParam(required = false, defaultValue = "enrolledAt") String sortBy,
-
-            @RequestParam(required = false) String filterBy,
-
-            @RequestParam(required = false) String filterValue,
-
-            @RequestParam(required = false, defaultValue = "10") int perPage,
-
-            @RequestParam(required = false, defaultValue = "1") int page){
-
-
-        return BaseResponse.<List<EnrollmentRespone>>ok()
-
-                .setPayload(enrollmentService.getEnrollment(sortBy,filterBy,filterValue, perPage, page));
-    }
-
-    @PutMapping("/{code}/progress")
-    @Operation(summary = "Update Enrollment Progress")
-    public BaseResponse<EnrollmentProgressRespone> updateEnrollment(@PathVariable Long code, @RequestBody EnrollmentProgressRequest enrollmentProgressRequest){
-
-        return BaseResponse.<EnrollmentProgressRespone>ok()
-
-                .setPayload(enrollmentService.updateEnrollment(code, enrollmentProgressRequest));
+    @Operation(summary = "Get enrollment by code")
+    public BaseResponse<EnrollmentResponse> getEnrollmentByCode(@PathVariable String code) {
+        return BaseResponse.<EnrollmentResponse>ok()
+                .setPayload(enrollmentService.getEnrollmentByCode(code));
     }
 
     @GetMapping("/{code}/progress")
-    @Operation(summary = "Get Progress of enroll learning")
-    public BaseResponse<EnrollmentProgressRespone> getProgress(@PathVariable Long code){
-
-        return BaseResponse.<EnrollmentProgressRespone>ok()
-
-                .setPayload(enrollmentService.getProgress(code));
+    @Operation(summary = "Get enrollment progress")
+    public BaseResponse<EnrollmentProgressResponse> getEnrollmentProgress(@PathVariable String code) {
+        return BaseResponse.<EnrollmentProgressResponse>ok()
+                .setPayload(enrollmentService.getEnrollmentProgress(code));
     }
 
-    @PutMapping("/{code}")
-    @Operation(summary = "Update disble enrollment")
-    public BaseResponse<EnrollmentRespone> disableEnrollment(@PathVariable Long code){
-
-        return BaseResponse.<EnrollmentRespone>ok()
-
-                .setPayload(enrollmentService.disableEnrollment(code));
+    @PutMapping("/{code}/progress")
+    @Operation(summary = "Update enrollment progress")
+    public BaseResponse<EnrollmentProgressResponse> updateEnrollmentProgress(@PathVariable String code, @RequestBody EnrollmentProgressRequest enrollmentProgressRequest) {
+        return BaseResponse.<EnrollmentProgressResponse>ok()
+                .setPayload(enrollmentService.updateEnrollmentProgress(code, enrollmentProgressRequest));
     }
 
-    @GetMapping("/all")
-    @Operation(summary = "Get all enrollments")
-    public BaseResponse<List<EnrollmentRespone>> getAllEnrollments(){
-
-        return BaseResponse.<List<EnrollmentRespone>>ok()
-
-                .setPayload(enrollmentService.getAllEnrollments());
+    @PatchMapping("/{code}/certify")
+    @Operation(summary = "Certify enrollment")
+    public BaseResponse<EnrollmentResponse> certifyEnrollment(@PathVariable String code) {
+        return BaseResponse.<EnrollmentResponse>ok()
+                .setPayload(enrollmentService.certifyEnrollment(code));
     }
+
+    @PatchMapping("/{code}/discard")
+    @Operation(summary = "Discard enrollment")
+    public BaseResponse<EnrollmentResponse> discardEnrollment(@PathVariable String code) {
+        return BaseResponse.<EnrollmentResponse>ok()
+                .setPayload(enrollmentService.discardEnrollment(code));
+    }
+
 }
