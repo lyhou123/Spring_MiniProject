@@ -12,6 +12,7 @@ public class Categories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     private String alias;
     private String icon;
     private Boolean isDeleted;

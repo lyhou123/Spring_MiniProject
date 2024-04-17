@@ -19,14 +19,17 @@ public interface CourseMapper {
 
     Course toCourse(CourseCreateRequest courseCreateRequest);
 
-    @Mapping(source = "instructor", target = "instructor", qualifiedByName = "toInstructorResponse")
-    @Mapping(source = "categories", target = "categories", qualifiedByName = "toCategoryResponse")
+    @Mapping(source = "instructor.given_name", target = "instructorGivenName")
+    @Mapping(source = "categories.name", target = "categoryName")
     CourseDetailsResponse toCourseDetailsResponse(Course course);
+
+
 
     @Named("toInstructorResponse")
     default InstructorResponse toInstructorResponse(Instructor instructor) {
         if (instructor == null) {
             System.out.println("Instructor is null");
+            // Create a default InstructorResponse object
             return null;
         }
         System.out.println("Instructor is not null");
@@ -35,15 +38,15 @@ public interface CourseMapper {
                 .given_name(instructor.getGiven_name())
                 .build();
     }
-
     @Named("toCategoryResponse")
-    default CategoryResponse toCategoryResponse(Categories category) {
-        if (category == null) {
+    default CategoryResponse toCategoryResponse(Categories categories) {
+        if (categories == null) {
+            // Handle null categories here
             return null;
         }
         return CategoryResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
+                .id(categories.getId())
+                .name(categories.getName())
                 .build();
     }
 }

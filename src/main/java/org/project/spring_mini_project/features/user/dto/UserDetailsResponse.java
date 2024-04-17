@@ -4,6 +4,25 @@ import lombok.Builder;
 import org.project.spring_mini_project.features.role.dto.RoleResponse;
 
 import java.util.Set;
+import java.util.UUID;
+
 @Builder
-public record UserDetailsResponse(Long id, String username, String email, Set<RoleResponse> roles) {
+public record UserDetailsResponse(Long id,
+                                  String username,
+                                  String email,
+                                  String family_name,
+                                  String given_name,
+                                  String gender,
+                                    String phone_number,
+                                    String address1,
+                                    String address2,
+                                    Integer city_id,
+                                    Integer country_id,
+                                    String national_id_card,
+                                    Boolean is_deleted,
+                                    Boolean is_verified,
+                                    String profile,
+                                    String verification_code,
+                                  UUID uuid,
+                                  Set<RoleResponse> roles) {
 }

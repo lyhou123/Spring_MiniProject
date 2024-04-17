@@ -1,9 +1,12 @@
 package org.project.spring_mini_project.features.course;
 
 import lombok.RequiredArgsConstructor;
+import org.project.spring_mini_project.domain.Categories;
 import org.project.spring_mini_project.domain.Course;
 import org.project.spring_mini_project.domain.Instructor;
+import org.project.spring_mini_project.features.category.CategoryRepository;
 import org.project.spring_mini_project.features.course.dto.*;
+import org.project.spring_mini_project.features.instructor.InstructorRepository;
 import org.project.spring_mini_project.mapper.CourseMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,14 +24,28 @@ public class CourseServiceImpl implements CourseService{
 
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
+    private final InstructorRepository instructorRepository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     @Override
     public CourseResponse createCourse(CourseCreateRequest courseCreateRequest) {
+        // Fetch the Instructor and Category objects from the database
+        Instructor instructor = instructorRepository.findById(courseCreateRequest.instructor_id().intValue())
+                .orElseThrow(() -> new RuntimeException("Instructor not found"));
+        Categories category = categoryRepository.findById(courseCreateRequest.Category_id())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        // Set the Instructor and Category objects in the Course object
         Course course = courseMapper.toCourse(courseCreateRequest);
+        course.setInstructor(instructor);
+        course.setCategories(category);
+
         course = courseRepository.save(course);
+        System.out.println(course);
         return courseMapper.toCourseResponse(course);
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<CourseResponse> findAllCourses(int page, int size) {
@@ -44,7 +61,7 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public CourseDetailsResponse findCourseDetails(String alias) {
         Course course = courseRepository.findCourseByAlias(alias);
-        Instructor instructor = course.getInstructor(); // This will fetch the Instructor
+        System.out.println(course);// This will fetch the Instructor
         return courseMapper.toCourseDetailsResponse(course);
     }
 

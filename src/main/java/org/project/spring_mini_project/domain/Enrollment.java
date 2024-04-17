@@ -6,6 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "enrollments")
@@ -19,15 +20,17 @@ public class Enrollment {
     private String code;
 
 
-    //relationship
-    private long course_id;
-    private LocalDateTime enrolled_at;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id")
+    private Course course;
+
+    private LocalDateTime enrolledAt;
     private Boolean is_deleted;
     private Boolean is_certified;
     private Integer progress;
 
     //relationship
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
     private Student student;
 }
