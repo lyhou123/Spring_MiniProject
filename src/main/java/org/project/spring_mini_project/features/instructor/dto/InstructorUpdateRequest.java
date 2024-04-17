@@ -12,6 +12,7 @@ public record InstructorUpdateRequest(
         Boolean is_blocked,
         String job_title,
         String linked_in,
+        String national_id_card,
         String profile,
         String website
 ) {}

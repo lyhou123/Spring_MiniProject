@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-public class WebMvcConfiguration implements WebMvcConfigurer {
+public class ResourceHandlerConfiguration implements WebMvcConfigurer {
     @Value("${file_storage.image_location}")
     String fileStorageLocation;
     @Value("${file_storage.client_path}")

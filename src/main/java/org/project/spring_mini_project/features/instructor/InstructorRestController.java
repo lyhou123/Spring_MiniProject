@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.project.spring_mini_project.features.instructor.dto.InstructorCreateRequest;
 import org.project.spring_mini_project.features.instructor.dto.InstructorResponse;
+import org.project.spring_mini_project.features.instructor.dto.InstructorUpdateRequest;
 import org.project.spring_mini_project.utils.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +41,8 @@ public class InstructorRestController {
 
     @PutMapping("/{username}")
     @Operation(summary = "Update instructor by username")
-    public BaseResponse<InstructorResponse> updateInstructor(@PathVariable String username, @RequestBody InstructorCreateRequest request){
-        InstructorResponse instructorResponse = instructorService.updateInstructor(username, request);
+    public BaseResponse<InstructorResponse> updateInstructor(@PathVariable String username, @RequestBody InstructorUpdateRequest instructorCreateRequest){
+        InstructorResponse instructorResponse = instructorService.updateInstructor(username, instructorCreateRequest);
         return BaseResponse.<InstructorResponse>updateSuccess()
                 .setPayload(instructorResponse);
     }

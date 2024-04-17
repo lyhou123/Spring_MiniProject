@@ -5,10 +5,7 @@ import org.project.spring_mini_project.domain.Course;
 import org.project.spring_mini_project.domain.Enrollment;
 import org.project.spring_mini_project.domain.Student;
 import org.project.spring_mini_project.features.course.CourseRepository;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressResponse;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentRequest;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentResponse;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressRequest;
+import org.project.spring_mini_project.features.enrollment.dto.*;
 import org.project.spring_mini_project.features.student.StudentRepository;
 import org.project.spring_mini_project.mapper.EnrollmentMapper;
 import org.springframework.data.domain.Page;
@@ -143,6 +140,15 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         enrollment.setIs_deleted(true);
         enrollment = enrollmentRepository.save(enrollment);
         return enrollmentMapper.toEnrollmentResponse(enrollment);
+    }
+
+    @Override
+    public EnrollmentDetailsResponse getEnrollmentDetails(String code) {
+        var enrollment = enrollmentRepository.findByCode(code);
+        if (enrollment == null) {
+            throw new NoSuchElementException("Enrollment not found");
+        }
+        return enrollmentMapper.toEnrollmentDetailsResponse(enrollment);
     }
 
 

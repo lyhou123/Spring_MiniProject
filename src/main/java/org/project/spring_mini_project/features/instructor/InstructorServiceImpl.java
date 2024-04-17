@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.project.spring_mini_project.domain.Instructor;
 import org.project.spring_mini_project.features.instructor.dto.InstructorCreateRequest;
 import org.project.spring_mini_project.features.instructor.dto.InstructorResponse;
+import org.project.spring_mini_project.features.instructor.dto.InstructorUpdateRequest;
 import org.project.spring_mini_project.features.user.UserRepository;
 import org.project.spring_mini_project.mapper.InstructorMapper;
 import org.springframework.data.domain.Page;
@@ -38,12 +39,15 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
-    public InstructorResponse updateInstructor(String username, InstructorCreateRequest instructorCreateRequest) {
+    public InstructorResponse updateInstructor(String username, InstructorUpdateRequest instructorCreateRequest) {
+
         Instructor instructor = instructorRepository.findInstructorByUser_Username(username)
                 .orElseThrow(() -> new RuntimeException("Instructor not found with username: " + username));
-        Instructor updatedInstructor = instructorMapper.instructorCreateRequestToInstructor(instructorCreateRequest, userRepository);
-        updatedInstructor.setId(instructor.getId());
-        updatedInstructor = instructorRepository.save(updatedInstructor);
+
+        instructorMapper.updateInstructorFromRequest(instructor, instructorCreateRequest);
+
+        Instructor updatedInstructor = instructorRepository.save(instructor);
+
         return instructorMapper.instructorToInstructorResponse(updatedInstructor);
     }
 

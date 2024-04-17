@@ -22,7 +22,7 @@ public class StudentRestController {
 
     @GetMapping
     @Operation(summary = "Get all students !")
-    public BaseResponse<List<StudentRespone>> getAllStudents( @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10")  int size){
+    public BaseResponse<List<StudentRespone>> getAllStudents( @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10")  int size){
         return BaseResponse.<List<StudentRespone>>ok()
                 .setPayload(studentService.getAllStudents(page,size));
     }

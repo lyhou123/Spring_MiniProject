@@ -1,9 +1,6 @@
 package org.project.spring_mini_project.features.enrollment;
 
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressResponse;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentRequest;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentResponse;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressRequest;
+import org.project.spring_mini_project.features.enrollment.dto.*;
 
 import java.util.List;
 
@@ -16,6 +13,6 @@ public interface EnrollmentService {
     EnrollmentResponse certifyEnrollment(String code);
     EnrollmentResponse discardEnrollment(String code);
 
-
+    EnrollmentDetailsResponse getEnrollmentDetails(String code);
 
 }

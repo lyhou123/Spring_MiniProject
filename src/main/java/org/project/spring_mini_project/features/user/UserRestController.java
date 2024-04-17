@@ -63,6 +63,6 @@ public class UserRestController {
     @Operation(summary = "Delete user")
     public BaseResponse<Void> deleteUser(@PathVariable String username){
         userService.deleteUser(username);
-        return BaseResponse.<Void>ok();
+        return BaseResponse.<Void>deleteSuccess();
     }
 }

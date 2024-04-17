@@ -9,6 +9,6 @@ import java.util.List;
 public interface InstructorService {
     List<InstructorResponse> findAllInstructors(int page, int size);
     InstructorResponse createInstructor(InstructorCreateRequest instructorCreateRequest);
-    InstructorResponse updateInstructor(String username, InstructorCreateRequest instructorCreateRequest);
+    InstructorResponse updateInstructor(String username, InstructorUpdateRequest instructorCreateRequest);
     InstructorResponse findInstructorByUsername(String username);
 }

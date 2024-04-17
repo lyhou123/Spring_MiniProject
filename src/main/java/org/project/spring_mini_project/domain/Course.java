@@ -31,9 +31,6 @@ public class Course {
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private Set<Enrollment> enrollments;
 
-//    @ManyToOne(cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "course_id")
-//    private Enrollment enrollment;
 
     @Override
     public String toString() {

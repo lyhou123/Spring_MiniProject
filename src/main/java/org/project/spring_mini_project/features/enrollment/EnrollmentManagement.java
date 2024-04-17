@@ -3,10 +3,7 @@ package org.project.spring_mini_project.features.enrollment;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressRequest;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentProgressResponse;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentRequest;
-import org.project.spring_mini_project.features.enrollment.dto.EnrollmentResponse;
+import org.project.spring_mini_project.features.enrollment.dto.*;
 import org.project.spring_mini_project.utils.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +51,7 @@ public class EnrollmentManagement {
                 .setPayload(enrollmentService.updateEnrollmentProgress(code, enrollmentProgressRequest));
     }
 
-    @PatchMapping("/{code}/certify")
+    @PatchMapping("/{code}/certified")
     @Operation(summary = "Certify enrollment")
     public BaseResponse<EnrollmentResponse> certifyEnrollment(@PathVariable String code) {
         return BaseResponse.<EnrollmentResponse>ok()
@@ -68,6 +65,11 @@ public class EnrollmentManagement {
                 .setPayload(enrollmentService.discardEnrollment(code));
     }
 
-
+    @GetMapping("/{code}/details")
+    @Operation(summary = "Get enrollment details")
+    public BaseResponse<EnrollmentDetailsResponse> getEnrollmentDetails(@PathVariable String code) {
+        return BaseResponse.<EnrollmentDetailsResponse>ok()
+                .setPayload(enrollmentService.getEnrollmentDetails(code));
+    }
 
 }

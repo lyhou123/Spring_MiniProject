@@ -12,6 +12,7 @@ public record EnrollmentDetailsResponse(
         Integer progress,
         String course_name,
         String student_name,
+        String courseCategory,
         String high_school,
         Boolean is_blocked,
         String university,

@@ -1,13 +1,12 @@
 package org.project.spring_mini_project.features.user;
 
 import lombok.RequiredArgsConstructor;
-import org.project.spring_mini_project.domain.City;
-import org.project.spring_mini_project.domain.Country;
-import org.project.spring_mini_project.domain.Role;
-import org.project.spring_mini_project.domain.User;
+import org.project.spring_mini_project.domain.*;
 import org.project.spring_mini_project.features.city.CityRepository;
 import org.project.spring_mini_project.features.country.CountryRepository;
+import org.project.spring_mini_project.features.instructor.InstructorRepository;
 import org.project.spring_mini_project.features.role.RoleRepository;
+import org.project.spring_mini_project.features.student.StudentRepository;
 import org.project.spring_mini_project.features.user.dto.UserDetailsResponse;
 import org.project.spring_mini_project.features.user.dto.UserRequest;
 import org.project.spring_mini_project.mapper.UserMapper;
@@ -30,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
+    private final StudentRepository studentRepository;
+    private final InstructorRepository instructorRepository;
 
     @Override
     public List<UserDetailsResponse> findAllUsers(String username, String email, String national_id_card, String phone_number, String given_name, String gender, Set<String> roleNames) {
@@ -73,7 +74,8 @@ public class UserServiceImpl implements UserService {
         Country country = countryRepository.findById(userRequest.country_id())
                 .orElseThrow(() -> new NoSuchElementException("Country not found !!! " ));
         user.setCountry(country);
-
+        user.setIs_deleted(false);
+        user.setIs_verified(false);
         User savedUser = userRepository.save(user);
         return userMapper.userToUserDetailsResponse(savedUser);
     }
@@ -110,9 +112,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String username) {
-        if (userRepository.findUserByUsername(username) == null) {
-            throw new NoSuchElementException("User not found");
+
+        User user = userRepository.findUserByUsername(username);
+
+        if (user != null) {
+
+            List<Student> students = studentRepository.findByUserId(user.getId());
+
+            studentRepository.deleteAll(students);
+
+            userRepository.delete(user);
         }
-        userRepository.deleteByUsername(username);
+
     }
 }

@@ -30,7 +30,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentRespone> getAllStudents(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        int pageSiz=page-1;
+        Pageable pageable = PageRequest.of(pageSiz, size);
         Page<Student> studentPage = studentRepository.findAll(pageable);
        return studentPage.stream().
                map(studentMapper::mapStudentToStudentResponse).toList();
@@ -79,9 +80,12 @@ public class StudentServiceImpl implements StudentService {
                                 "Student with username = "+username+" not found"
                         )
                 );
-        var updateStudent=studentMapper.mapStudentRequestToStudent(studentUpdateRequest);
-        updateStudent.setId(findStudent.getId());
+        studentMapper.updateStudentFromRequest(findStudent,studentUpdateRequest);
+return studentMapper.mapStudentToStudentResponse(studentRepository.save(findStudent));
 
-        return studentMapper.mapStudentToStudentResponse(studentRepository.save(updateStudent));
+//        var updateStudent=studentMapper.mapStudentRequestToStudent(studentUpdateRequest);
+//        updateStudent.setId(findStudent.getId());
+//
+//        return studentMapper.mapStudentToStudentResponse(studentRepository.save(updateStudent));
     }
 }
