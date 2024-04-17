@@ -53,6 +53,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public List<EnrollmentResponse> getEnrollments(int page, int size, String code, String courseTitle, String courseCategory, String studentUsername, Boolean is_certified) {
 
+       if(page<=0){
+            throw new IllegalArgumentException("Page number must be greater than 0");
+        }
         //starting fix page index size because page index start from index 0
         int fixedPage = page - 1;
 
@@ -77,16 +80,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .collect(Collectors.toList());
     }
 
-
-    @Override
-    public EnrollmentResponse getEnrollmentByCode(String code) {
-
-        Enrollment enrollment = enrollmentRepository.findByCode(code);
-        if (enrollment == null) {
-            throw new NoSuchElementException("Enrollment not found");
-        }
-        return enrollmentMapper.toEnrollmentResponse(enrollment);
-    }
 
     @Override
     public EnrollmentProgressResponse updateEnrollmentProgress(String code, EnrollmentProgressRequest enrollmentProgressRequest) {

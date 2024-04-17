@@ -30,8 +30,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentRespone> getAllStudents(int page, int size) {
-        int pageSiz=page-1;
-        Pageable pageable = PageRequest.of(pageSiz, size);
+
+        if(page<=0){
+            throw new IllegalArgumentException("Page number must be greater than 0");
+        }
+
+        int pageSize=page-1;
+
+        Pageable pageable = PageRequest.of(pageSize, size);
         Page<Student> studentPage = studentRepository.findAll(pageable);
        return studentPage.stream().
                map(studentMapper::mapStudentToStudentResponse).toList();

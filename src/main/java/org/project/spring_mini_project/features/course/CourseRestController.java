@@ -26,7 +26,7 @@ public class CourseRestController{
 
     @GetMapping
     @Operation(summary = "Get all courses")
-    public BaseResponse<List<CourseResponse>> findAllCourses(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public BaseResponse<List<CourseResponse>> findAllCourses(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size){
         return BaseResponse.<List<CourseResponse>>ok()
                 .setPayload(courseService.findAllCourses(page, size));
     }

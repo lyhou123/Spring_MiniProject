@@ -30,12 +30,6 @@ public class EnrollmentManagement {
                 .setPayload(enrollmentResponse);
     }
 
-    @GetMapping("/{code}")
-    @Operation(summary = "Get enrollment by code")
-    public BaseResponse<EnrollmentResponse> getEnrollmentByCode(@PathVariable String code) {
-        return BaseResponse.<EnrollmentResponse>ok()
-                .setPayload(enrollmentService.getEnrollmentByCode(code));
-    }
 
     @GetMapping("/{code}/progress")
     @Operation(summary = "Get enrollment progress")
@@ -65,7 +59,7 @@ public class EnrollmentManagement {
                 .setPayload(enrollmentService.discardEnrollment(code));
     }
 
-    @GetMapping("/{code}/details")
+    @GetMapping("/{code}")
     @Operation(summary = "Get enrollment details")
     public BaseResponse<EnrollmentDetailsResponse> getEnrollmentDetails(@PathVariable String code) {
         return BaseResponse.<EnrollmentDetailsResponse>ok()

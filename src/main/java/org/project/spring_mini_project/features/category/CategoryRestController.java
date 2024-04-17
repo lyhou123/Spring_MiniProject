@@ -25,7 +25,7 @@ public class CategoryRestController {
 
     @GetMapping
     @Operation(summary = "Get all categories")
-    public BaseResponse<List<CategoryResponse>> findAllCategories(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public BaseResponse<List<CategoryResponse>> findAllCategories(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return BaseResponse.<List<CategoryResponse>>ok()
                 .setPayload(categoryService.findAllCategories(page, size));
     }

@@ -49,7 +49,14 @@ public class CourseServiceImpl implements CourseService{
     @Transactional(readOnly = true)
     @Override
     public List<CourseResponse> findAllCourses(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+
+        if(page<=0){
+            throw new IllegalArgumentException("Page number must be greater than 0");
+        }
+
+        int pageSize=page-1;
+
+        Pageable pageable = PageRequest.of(pageSize, size);
         Page<Course> coursePage = courseRepository.findAll(pageable);
         return coursePage.stream()
                 .map(courseMapper::toCourseResponse)

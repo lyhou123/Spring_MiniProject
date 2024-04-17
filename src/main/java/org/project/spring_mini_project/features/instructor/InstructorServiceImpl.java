@@ -24,7 +24,14 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public List<InstructorResponse> findAllInstructors(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+
+        if(page<=0){
+            throw new IllegalArgumentException("Page number must be greater than 0");
+        }
+
+        int pageSize = page - 1;
+
+        Pageable pageable = PageRequest.of(pageSize, size);
         Page<Instructor> instructorPage = instructorRepository.findAll(pageable);
         return instructorPage.stream()
                 .map(instructorMapper::instructorToInstructorResponse)
@@ -34,6 +41,8 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public InstructorResponse createInstructor(InstructorCreateRequest instructorCreateRequest) {
         Instructor instructor = instructorMapper.instructorCreateRequestToInstructor(instructorCreateRequest, userRepository);
+        instructor.setIs_deleted(false);
+        instructor.setIs_deleted(false);
         Instructor savedInstructor = instructorRepository.save(instructor);
         return instructorMapper.instructorToInstructorResponse(savedInstructor);
     }

@@ -47,7 +47,14 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public List<CategoryResponse> findAllCategories(int page, int size) {
-        return categoryRepository.findAll(PageRequest.of(page, size)).stream()
+
+        if(page<=0){
+            throw new IllegalArgumentException("Page number must be greater than 0");
+        }
+
+        int pageSize=page-1;
+
+        return categoryRepository.findAll(PageRequest.of(pageSize, size)).stream()
                 .map(categoryMapper::responseToCategory)
                 .collect(Collectors.toList());
     }

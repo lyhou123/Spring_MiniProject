@@ -26,7 +26,7 @@ public class InstructorRestController {
 
     @GetMapping
     @Operation(summary = "Get all instructors")
-    public BaseResponse<List<InstructorResponse>> findAllInstructors(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public BaseResponse<List<InstructorResponse>> findAllInstructors(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size){
         return BaseResponse.<List<InstructorResponse>>ok()
                 .setPayload(instructorService.findAllInstructors(page, size));
     }
