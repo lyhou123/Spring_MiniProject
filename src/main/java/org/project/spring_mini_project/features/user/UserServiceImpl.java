@@ -58,13 +58,10 @@ public class UserServiceImpl implements UserService {
     public UserDetailsResponse createUser(UserRequest userRequest) {
         User user = userMapper.userRequestToUser(userRequest);
 
+        Role role = roleRepository.findByName("USER")
+                .orElseThrow(() -> new NoSuchElementException("Role not found with name: USER"));
         Set<Role> roles = new HashSet<>();
-        for (String roleName : userRequest.roleNames()) {
-            Role role = roleRepository.findByName(roleName)
-                    .orElseThrow(() -> new NoSuchElementException("Role not found with name: " + roleName));
-            roles.add(role);
-        }
-
+        roles.add(role);
         user.setRoles(roles);
 
         City city = cityRepository.findById(userRequest.city_id())

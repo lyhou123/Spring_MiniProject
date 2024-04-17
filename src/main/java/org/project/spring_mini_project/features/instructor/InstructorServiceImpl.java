@@ -2,9 +2,11 @@ package org.project.spring_mini_project.features.instructor;
 
 import lombok.RequiredArgsConstructor;
 import org.project.spring_mini_project.domain.Instructor;
+import org.project.spring_mini_project.domain.Role;
 import org.project.spring_mini_project.features.instructor.dto.InstructorCreateRequest;
 import org.project.spring_mini_project.features.instructor.dto.InstructorResponse;
 import org.project.spring_mini_project.features.instructor.dto.InstructorUpdateRequest;
+import org.project.spring_mini_project.features.role.RoleRepository;
 import org.project.spring_mini_project.features.user.UserRepository;
 import org.project.spring_mini_project.mapper.InstructorMapper;
 import org.springframework.data.domain.Page;
@@ -12,7 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +26,7 @@ public class InstructorServiceImpl implements InstructorService {
     private final InstructorRepository instructorRepository;
     private final InstructorMapper instructorMapper;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     public List<InstructorResponse> findAllInstructors(int page, int size) {
@@ -40,6 +46,22 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public InstructorResponse createInstructor(InstructorCreateRequest instructorCreateRequest) {
+        var owner = userRepository.findById(instructorCreateRequest.userId())
+                .orElseThrow(
+                        () -> new NoSuchElementException(
+                                "User ID = " + instructorCreateRequest.userId() + " is not a valid user"
+                        )
+                );
+
+        // Fetch the "INSTRUCTOR" role
+        Role role = roleRepository.findByName("INSTRUCTOR")
+                .orElseThrow(() -> new NoSuchElementException("Role not found with name: INSTRUCTOR"));
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+
+        // Set the "INSTRUCTOR" role to the user
+        owner.setRoles(roles);
+        userRepository.save(owner);
         Instructor instructor = instructorMapper.instructorCreateRequestToInstructor(instructorCreateRequest, userRepository);
         instructor.setIs_deleted(false);
         instructor.setIs_deleted(false);

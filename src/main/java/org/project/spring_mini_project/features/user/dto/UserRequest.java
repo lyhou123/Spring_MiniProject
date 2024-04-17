@@ -31,10 +31,9 @@ public record UserRequest(
         String phone_number,
         String profile,
         Integer city_id,
-        Long country_id,
+        Long country_id
 //        @NotEmpty
 //        @DateTimeFormat(pattern = "yyyy-MM-dd")
 //        LocalDate dob,
-        @NotEmpty
-        Set<String> roleNames) {
+        ) {
 }

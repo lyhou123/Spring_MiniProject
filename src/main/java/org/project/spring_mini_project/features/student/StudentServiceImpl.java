@@ -1,7 +1,9 @@
 package org.project.spring_mini_project.features.student;
 
 import lombok.RequiredArgsConstructor;
+import org.project.spring_mini_project.domain.Role;
 import org.project.spring_mini_project.domain.Student;
+import org.project.spring_mini_project.features.role.RoleRepository;
 import org.project.spring_mini_project.features.student.dto.StudentCreateRequest;
 import org.project.spring_mini_project.features.student.dto.StudentRespone;
 import org.project.spring_mini_project.features.student.dto.StudentUpdateRequest;
@@ -14,8 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +30,8 @@ public class StudentServiceImpl implements StudentService {
     private final UserRepository userRepository;
 
     private final StudentMapper studentMapper;
+
+    private final RoleRepository roleRepository;
 
 
     @Override
@@ -51,7 +57,12 @@ public class StudentServiceImpl implements StudentService {
                                 "User ID = " + studentCreateRequest.user_id() + " is not a valid user"
                         )
                 );
-
+        Role role = roleRepository.findByName("STUDENT")
+                .orElseThrow(() -> new NoSuchElementException("Role not found with name: STUDENT"));
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        owner.setRoles(roles);
+        userRepository.save(owner);
         var student=studentMapper.mapStudentRequestToStudent(studentCreateRequest);
 
         student.setUser(owner);
