@@ -58,13 +58,11 @@ public class UserServiceImpl implements UserService {
     public UserDetailsResponse createUser(UserRequest userRequest) {
         User user = userMapper.userRequestToUser(userRequest);
 
+        // Set the default role as "USER"
+        Role role = roleRepository.findByName("USER")
+                .orElseThrow(() -> new NoSuchElementException("Role not found with name: USER"));
         Set<Role> roles = new HashSet<>();
-        for (String roleName : userRequest.roleNames()) {
-            Role role = roleRepository.findByName(roleName)
-                    .orElseThrow(() -> new NoSuchElementException("Role not found with name: " + roleName));
-            roles.add(role);
-        }
-
+        roles.add(role);
         user.setRoles(roles);
 
         City city = cityRepository.findById(userRequest.city_id())
@@ -74,11 +72,11 @@ public class UserServiceImpl implements UserService {
         Country country = countryRepository.findById(userRequest.country_id())
                 .orElseThrow(() -> new NoSuchElementException("Country not found !!! " ));
         user.setCountry(country);
-        user.setIs_deleted(false);
-        user.setIs_verified(false);
+
         User savedUser = userRepository.save(user);
         return userMapper.userToUserDetailsResponse(savedUser);
     }
+
 
     @Override
     public UserDetailsResponse findUserByUsername(String username) {

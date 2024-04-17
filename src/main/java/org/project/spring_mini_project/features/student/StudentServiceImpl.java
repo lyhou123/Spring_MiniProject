@@ -1,7 +1,9 @@
 package org.project.spring_mini_project.features.student;
 
 import lombok.RequiredArgsConstructor;
+import org.project.spring_mini_project.domain.Role;
 import org.project.spring_mini_project.domain.Student;
+import org.project.spring_mini_project.features.role.RoleRepository;
 import org.project.spring_mini_project.features.student.dto.StudentCreateRequest;
 import org.project.spring_mini_project.features.student.dto.StudentRespone;
 import org.project.spring_mini_project.features.student.dto.StudentUpdateRequest;
@@ -14,8 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +28,8 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
 
     private final StudentMapper studentMapper;
 
@@ -52,18 +58,24 @@ public class StudentServiceImpl implements StudentService {
                         )
                 );
 
-        var student=studentMapper.mapStudentRequestToStudent(studentCreateRequest);
+        // Fetch the "STUDENT" role
+        Role role = roleRepository.findByName("STUDENT")
+                .orElseThrow(() -> new NoSuchElementException("Role not found with name: STUDENT"));
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
 
+        // Set the "STUDENT" role to the user
+        owner.setRoles(roles);
+        userRepository.save(owner);
+
+        var student = studentMapper.mapStudentRequestToStudent(studentCreateRequest);
         student.setUser(owner);
 
-        student.setIs_blocked(false);
-
-        var saveStudent=studentRepository.save(student);
+        var saveStudent = studentRepository.save(student);
 
         return studentMapper.mapStudentToStudentResponse(saveStudent);
-
-
     }
+
 
     @Override
     public StudentRespone getStudentByUsername(String username) {

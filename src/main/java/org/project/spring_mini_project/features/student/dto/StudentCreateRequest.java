@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 public record StudentCreateRequest (
         String high_school,
         String university,
-        @NotNull
         Long user_id
 
 ) {
